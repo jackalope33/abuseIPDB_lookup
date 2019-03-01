@@ -12,27 +12,18 @@ Input: File with list of IP addresses
 Output: CSV file including the following fields:
 
   IP Address
-  
   Public
-  
   White Listed
-  
   Confidence Score
-  
   Country
-  
   ISP
-  
   Domain
-  
   Total Reports
-  
   Last Reported
   
   
   
-The scripts creates two directories:
-
+The scripts creates two directories:\n
 json_results/ : Contains json files of all IPs with confidence score greater than 0
 
 results/ :      Contains csv file of all results
