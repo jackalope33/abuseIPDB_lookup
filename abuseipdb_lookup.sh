@@ -45,9 +45,13 @@ api_call () {
 		printf "\nLooking up IP..."
 		ip=$(name_look $ip)
 		if [ -z $ip ]; then
-			printf "\nNo IP registered for host %s. Skipping" $1
-			let skip=1
-			return 1
+			if [ $file -eq 0 ]; then
+				printf "No IP registed for host %s. Exiting.\n" $1
+				exit
+			else
+				printf "\nNo IP registered for host %s. Skipping\n" $1
+				let skip=1
+			fi
 		fi
 		printf "Checking %s..." $ip
 	fi
