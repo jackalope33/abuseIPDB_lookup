@@ -4,9 +4,9 @@
 This is a basic bash script for querying the AbuseIPDB API. 
 
 **Usage:** 
-  -./abuseipdb_lookup.sh <ip address>
+  - ./abuseipdb_lookup.sh <ip address>
 (where file contains a list of IP addresses to be checked)
-  -./abuseipdb_lookup.sh -f <file>
+  - ./abuseipdb_lookup.sh -f <file>
 
 **Input:** File with list of IP addresses/hostnames
 
