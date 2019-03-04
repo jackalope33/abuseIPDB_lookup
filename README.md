@@ -3,6 +3,8 @@
 
 This is a basic bash script for querying the AbuseIPDB API. 
 
+Before first run, make script executable (chmod +x abuseipdb_lookup.sh)
+
 **Usage:** 
   - ./abuseipdb_lookup.sh \<ip address\>
 (where file contains a list of IP addresses to be checked)
