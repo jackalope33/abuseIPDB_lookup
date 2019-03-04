@@ -1,4 +1,4 @@
-# abuseIPDB_lookup
+# AbuseIPDB Lookup
 **Small Bash script for querying AbuseIPDB API**
 
 This is a basic bash script for querying the AbuseIPDB API. 
