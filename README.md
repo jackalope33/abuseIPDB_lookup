@@ -3,10 +3,12 @@
 
 This is a basic bash script for querying the AbuseIPDB API. 
 
-**Usage:** ./abuseipdb_check.sh <file>.txt
+**Usage:** 
+  -./abuseipdb_lookup.sh <ip address>
 (where file contains a list of IP addresses to be checked)
+  -./abuseipdb_lookup.sh -f <file>
 
-**Input:** File with list of IP addresses
+**Input:** File with list of IP addresses/hostnames
 
 **Output:** CSV file including the following fields:
 - IP Address
@@ -27,4 +29,4 @@ This is a basic bash script for querying the AbuseIPDB API.
 
 
 *Important Note: In order to use this script, you must register with Abuseipdb.com for an API key*
-- (Enter the API key in line 3, after "api_key=")
+- Upon first run, you will be prompted for the API key
