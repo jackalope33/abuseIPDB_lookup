@@ -45,13 +45,9 @@ api_call () {
 		printf "\nLooking up IP..."
 		ip=$(name_look $ip)
 		if [ -z $ip ]; then
-			if [ $file -eq 0 ]; then
-				printf "No IP registed for host %s. Exiting.\n" $1
-				exit
-			else
-				printf "\nNo IP registered for host %s. Skipping\n" $1
-				let skip=1
-			fi
+			printf "\nNo IP registered for host %s. Skipping" $1
+			let skip=1
+			return 1
 		fi
 		printf "Checking %s..." $ip
 	fi
@@ -141,9 +137,12 @@ case $1 in
 		# Single query of API using IP address passed as command line argument
 		printf "\nChecking %s..." $1
 		api_call $1 $api_key
-		if [ "$score" -eq 0 ]; then
-			printf "\n\n%s has not been reported to AbuseIPDB.\n" $1
+		if [ -z "$score" ]; then
+			printf "\n\nInvalid response for %s. Exiting.\n" $1
 		else
+			if [ "$score" -eq 0 ]; then
+				printf "\n\n%s has not been reported to AbuseIPDB.\n" $1
+			else
 			printf "\n\n%s has been reported as malicious!\n\n" $1
 			sleep 1
 			printf "Domain:\t\t\t%s\n" $domain
@@ -152,6 +151,7 @@ case $1 in
 			printf "Confidence Score:\t%s\n" $score
 			printf "Total Reports:\t\t%s\n" $totalReports
 			printf "Last Reported:\t\t%s\n\n" $lastReportedAt
+			fi
 		fi
 		rm -f $1.json 2> /dev/null
 		;;
