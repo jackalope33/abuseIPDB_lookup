@@ -129,8 +129,7 @@ case $1 in
 		printf "This is a basic utility that queries the Abuse IPDB for IP addresses that have been reported as malicious.\n"
 		printf "\nArguments:\n\t<ip>:\tPassing a single IP address as an argument will perform\n\t\ta single lookup. Results are displayed as standard output.\n"
 		printf "\n\t\tex: ./abuseipdb_lookup.sh 123.123.123.123\n"
-		printf "\n\t-f:\tThe file argument requires a file containing a list of IP addresses\n\t\tto be specified. Results are saved as a csv file.\n\n\t\tex: ./abuseipdb_lookup.sh -f list.txt"
-		printf "\n\nFor questions or suggestions, please email Jim Garrisi at james.garrisi@viacom.com.\n\n."
+		printf "\n\t-f:\tThe file argument requires a file containing a list of IP addresses\n\t\tto be specified. Results are saved as a csv file.\n\n\t\tex: ./abuseipdb_lookup.sh -f list.txt\n\n"
 		;;
 	*)
 		let file=0
