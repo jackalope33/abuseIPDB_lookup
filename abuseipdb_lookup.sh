@@ -7,6 +7,13 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
+# Check for jq. If not present, prompt for installation.
+jq 2> /dev/null
+if [[ $? == "127" ]]; then
+	printf "jq not installed. Please run the following command to install.\n\tDebian: apt-get install jq\n\tRed Hat: yum install jq\n\tMac: brew install jq\n"
+	exit
+fi
+
 # Check for API key. If not present, prompt for key
 if [ ! -f ".abuse_apikey" ]; then
 	printf "No API key found. Please enter API key: "
@@ -57,14 +64,15 @@ api_call () {
 		-d verbose \
 		-H "Key: $2" \
 		-H "Accept: application/json" >> $ip.json
-		isPublic=$(cat $ip.json | awk -F, '{print $2}' | cut -c 12-)
-		isWhitelisted=$(cat $ip.json | awk -F, '{print $4}' | cut -c 17-)
-		score=$(cat $ip.json | awk -F, '{print $5}' | cut -c 24-)
-		countryName=$(cat $ip.json | awk -F, '{print $10}' | cut -c 15- | sed "s/\"//g")
-		isp=$(cat $ip.json | awk -F, '{print $8}' | cut -c 7- | sed "s/\"//g")
-		domain=$(cat $ip.json | awk -F, '{print $9}' | cut -c 10- | sed "s/\"//g")
-		totalReports=$(cat $ip.json | awk -F, '{print $11}' | cut -c 16-)
-		lastReportedAt=$(cat $ip.json | awk -F, '{print $12}' | cut -c 18- | sed "s/\"//g")
+
+		isPublic=$(cat $ip.json | jq -r '.["data"].["isPublic"]')
+		isWhitelisted=$(cat $ip.json | jq -r '.["data"].["isWhitelisted"]')
+		score=$(cat $ip.json | jq -r '.["data"].["abuseConfidenceScore"]')
+		countryName=$(cat $ip.json | jq -r '.["data"].["countryName"]')
+		isp=$(cat $ip.json | jq -r '.["data"].["isp"]')
+		domain=$(cat $ip.json | jq -r '.["data"].["domain"]')
+		totalReports=$(cat $ip.json | jq -r '.["data"].["totalReports"]')
+		lastReportedAt=$(cat $ip.json | jq -r '.["data"].["lastReportedAt"]')
 
 		# Checks status code of API response. Exits if site unavailable
 		if [ $(cat $ip.json | awk -F, '{print $1}' | cut -c 23-) -eq 1 ] 2>/dev/null ; then
@@ -99,7 +107,7 @@ case $1 in
 			if [ $skip -eq 1 ]; then
 				continue
 			fi
-			echo $ip","$isPublic","$isWhitelisted","$score","$countryName","$isp","$domain","$totalReports","$lastReportedAt >> results/abuse_results_$date.csv
+			echo \"$ip\"","\"$isPublic\"","\"$isWhitelisted\"","\"$score\"","\"$countryName\"","\"$isp\"","\"$domain\"","\"$totalReports\"","\"$lastReportedAt\" >> results/abuse_results_$date.csv
 			if [ "$score" -gt 0 ]; then
 				mv $ip.json json_results/
 				printf "\t**MALICIOUS**"
@@ -140,7 +148,7 @@ case $1 in
 			printf "\n\nInvalid response for %s. Exiting.\n" $1
 		else
 			if [ "$score" -eq 0 ]; then
-				printf "\n\n%s has not been reported to AbuseIPDB.\n" $1
+				printf "\n\n%s has either not been reported as suspicious/malicious or has been whitelisted.\n" $1
 			else
 			printf "\n\n%s has been reported as malicious!\n\n" $1
 			sleep 1
