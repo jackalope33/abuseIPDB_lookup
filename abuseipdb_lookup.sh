@@ -1,4 +1,10 @@
 #!/bin/bash
+
+#================================
+# AbuseIPDB Reputation Lookup
+# Viacom Corporation JMG 2019
+#================================
+
 date=$(date | sed s/[" ":]/_/g | cut -c -19)
 
 # Exit if no arguments passed
@@ -7,7 +13,7 @@ if [ -z $1 ]; then
 	exit 1
 fi
 
-# Check for jq. If not present, prompt for installation.
+# Check for jq. If not present, prompt for installation
 jq 2> /dev/null
 if [[ $? == "127" ]]; then
 	printf "jq not installed. Please run the following command to install.\n\tDebian: apt-get install jq\n\tRed Hat: yum install jq\n\tMac: brew install jq\n"
@@ -40,7 +46,7 @@ name_look () {
 }
 
 # Function for API call -- uses curl to obtain json record of IP being queried
-# Parses syntax and assigns variable values using awk
+# Parses syntax and assigns variable values using jq
 api_call () {
 	ip=$1
 
